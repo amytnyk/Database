@@ -95,21 +95,7 @@ class RedBlackTree(AbstractTree):
             node.parent.right = temp
         temp.left = node
         node.parent = temp
-        # temp = node.left
-        # node.left = parent
-        # parent.right = temp
-        # node.parent = parent.parent
-        # if parent != self._root:
-        #     if parent.parent.left == parent:
-        #         parent.parent.left = node
-        #     else:
-        #         parent.parent.right = node
-        # parent.parent = node
-        # node.color = "black"
-        # parent.color = "red"
-        # if self._root == parent:
-        #     self._root = node
-
+    
     def rotate_right(self, node):
         temp = node.left
         node.left = temp.right
@@ -123,21 +109,6 @@ class RedBlackTree(AbstractTree):
             node.parent.left = temp
         temp.right = node
         node.parent = temp
-        # temp = parent.right
-        # parent.right = grand
-        # grand.left = temp
-        # parent.parent = grand.parent
-        # if grand != self._root:
-        #     if grand.parent.left == grand:
-        #         grand.parent.left = parent
-        #     else:
-        #         grand.parent.right = parent
-        # grand.parent = parent
-        # parent.color = "black"
-        # grand.color = "red"
-        # if self._root == grand:
-        #     self._root = parent
-
 
     def get(self, key):
         """
@@ -200,44 +171,3 @@ class RedBlackTree(AbstractTree):
 
     def __iter__(self):
         pass
-
-    def __getitem__(self, item):
-        return self.get(item)
-
-    def __setitem__(self, key, value):
-        self.insert(key, value)
-
-    def __contains__(self, item):
-        return self.contains(item)
-
-a = RedBlackTree()
-a.insert(0, 0)
-a.insert(1, 1)
-a.insert(2, 2)
-a.insert(7, 7)
-a.insert(8, 8)
-a.insert(3, 3)
-a.insert(4, 4)
-a.insert(5, 5)
-a.insert(6, 6)
-t1 = a.get(0)
-t2 = a.get(1)
-t3 = a.get(2)
-t4 = a.get(3)
-t5 = a.get(4)
-t6 = a.get(5)
-t7 = a.get(6)
-t8 = a.get(7)
-t9 = a.get(8)
-# print(a._root.key)
-# a.insert("A", 1)
-# a.insert("B", 2)
-# a.insert("C", 4)
-# a.insert(68, 67)
-# a.insert(1, 1)
-# a.insert(2, 2)
-# a = a
-# for i in range(1, 12, 1):
-#     a.insert(i, i)
-# a = a
-# print(a.get(10))
