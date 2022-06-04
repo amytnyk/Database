@@ -101,7 +101,7 @@ class ProfileTreesSpeed:
         # add a legend and plot name
         plt.title(f"{type_to_visualize.capitalize()} time for different data sizes")
         plt.xlabel("Data size")
-        plt.ylabel("Time")
+        plt.ylabel("Time total")
 
         # save the plot
         plt.savefig(f"images/profile_speed_{type_to_visualize}.png")
