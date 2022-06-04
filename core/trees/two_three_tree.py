@@ -167,6 +167,31 @@ class Node:
 
         return children_data
 
+    def inorder(self):
+        """ Return all data in tree """
+        if self.is_leaf:
+            return self.data
+
+        children_data = []
+
+        if len(self) == 1:
+            children_data.extend(self.children[0].inorder())
+            children_data.extend(self.data)
+            children_data.extend(self.children[1].inorder())
+        else:
+            if len(self.children) == 2:
+                children_data.extend(self.children[0].inorder())
+                children_data.extend(self.data)
+                children_data.extend(self.children[1].inorder())
+            else:
+                children_data.extend(self.children[0].inorder())
+                children_data.extend([self.data[0]])
+                children_data.extend(self.children[1].inorder())
+                children_data.extend([self.data[1]])
+                children_data.extend(self.children[2].inorder())
+
+        return children_data
+
     def search_node_with_minimum_key(self):
         """ Return node with minimum key """
         if self.is_leaf:
@@ -298,7 +323,7 @@ class TwoThreeTree(AbstractTree):
         """ Return iterator over keys in tree """
         if not self._has_root:
             return iter([])
-        return iter(self.root.get_all_children_data_recursive())
+        return iter(self.root.inorder())
 
 
 if __name__ == '__main__':
