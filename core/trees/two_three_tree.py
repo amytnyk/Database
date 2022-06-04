@@ -112,7 +112,14 @@ class Node:
         """ Insert node into tree """
         if self.is_leaf:
             # If node is leaf, insert into data
-            self.combine_nodes(node)
+            if node.data[0][0] in self.data_list:
+                # If key is already in data, replace value
+                for key_data in range(len(self.data)):
+                    if self.data[key_data][0] == node.data[0][0]:
+                        self.data[key_data] = node.data[0]
+                        break
+            else:
+                self.combine_nodes(node)
         else:
             # If node is not leaf, insert into children
             if node < self:
@@ -263,8 +270,11 @@ class TwoThreeTree(AbstractTree):
     def get(self, key):
         """ Return key in tree, or None if not found """
         if not self._has_root:
-            return False
-        return self.root.get(key)
+            raise KeyError("Key not found")
+        element = self.root.get(key)
+        if element is None:
+            raise KeyError("Key not found")
+        return element
 
     def contains(self, key) -> bool:
         """ Return True if key is in tree """
@@ -310,5 +320,5 @@ if __name__ == '__main__':
     print()
     print(tree)
     print()
-    print(f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}, Tree value of '{TO_DELETE}': {tree.get(TO_DELETE)}")
+    print(f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}")
     print(f"Size of tree: {len(tree)}")
