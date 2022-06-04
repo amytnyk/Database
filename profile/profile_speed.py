@@ -50,7 +50,10 @@ class ProfileTreesSpeed:
         start_time = time.time()
 
         for random_element in random_elements:
-            tree.insert(str(random_element), random_element)
+            try:
+                tree.insert(str(random_element), random_element)
+            except Exception as e:
+                pass
 
         end_time = time.time()
         result["insertion"] = end_time - start_time
@@ -59,7 +62,10 @@ class ProfileTreesSpeed:
         start_time = time.time()
 
         for random_element in self.create_random_elements_list(data_size):
-            tree.contains(str(random_element))
+            try:
+                tree.contains(str(random_element))
+            except Exception as e:
+                pass
 
         end_time = time.time()
         result["search"] = end_time - start_time
@@ -68,7 +74,10 @@ class ProfileTreesSpeed:
         start_time = time.time()
 
         for random_element in random_elements[:len(random_elements) // 3 + 1]:
-            tree.delete(str(random_element))
+            try:
+                tree.delete(str(random_element))
+            except Exception as e:
+                pass
 
         end_time = time.time()
         result["deletion"] = end_time - start_time
