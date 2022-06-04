@@ -1,22 +1,27 @@
-from copy import copy
-
 from core.trees.abstract_tree import AbstractTree
-class Leaf:
 
-    def __init__(self, color="black"):
+
+class Leaf:
+    """
+    Leaf class
+    """
+
+    def __init__(self, parent):
         self.key = None
-        self.color = color
+        self.color = "black"
+        self.parent = parent
 
 
 class BSTNode:
     """Represents a node for a linked binary search tree."""
-    def __init__(self, key, data, parent=None, color='red', left=None, right=None):
+
+    def __init__(self, key, data, parent=None, color='red'):
         self.key = key
         self.data = data
         self.parent = parent
         self.color = color
-        self.left = Leaf()
-        self.right = Leaf()
+        self.left = Leaf(self)
+        self.right = Leaf(self)
 
 
 class RedBlackTree(AbstractTree):
@@ -56,7 +61,6 @@ class RedBlackTree(AbstractTree):
                     break
             self.checker(node)
 
-
     def checker(self, node):
         while node != self._root and node.parent.color == "red":
             uncle = node.parent.parent.left if node.parent.parent.right == node.parent else node.parent.parent.right
@@ -95,20 +99,6 @@ class RedBlackTree(AbstractTree):
             node.parent.right = temp
         temp.left = node
         node.parent = temp
-        # temp = node.left
-        # node.left = parent
-        # parent.right = temp
-        # node.parent = parent.parent
-        # if parent != self._root:
-        #     if parent.parent.left == parent:
-        #         parent.parent.left = node
-        #     else:
-        #         parent.parent.right = node
-        # parent.parent = node
-        # node.color = "black"
-        # parent.color = "red"
-        # if self._root == parent:
-        #     self._root = node
 
     def rotate_right(self, node):
         temp = node.left
@@ -123,21 +113,6 @@ class RedBlackTree(AbstractTree):
             node.parent.left = temp
         temp.right = node
         node.parent = temp
-        # temp = parent.right
-        # parent.right = grand
-        # grand.left = temp
-        # parent.parent = grand.parent
-        # if grand != self._root:
-        #     if grand.parent.left == grand:
-        #         grand.parent.left = parent
-        #     else:
-        #         grand.parent.right = parent
-        # grand.parent = parent
-        # parent.color = "black"
-        # grand.color = "red"
-        # if self._root == grand:
-        #     self._root = parent
-
 
     def get(self, key):
         """
@@ -165,6 +140,8 @@ class RedBlackTree(AbstractTree):
         :return:
         """
         node = self._root
+        if node is None:
+            return False
         while 1:
             if node.key is not None:
                 if node.key > key:
@@ -176,68 +153,122 @@ class RedBlackTree(AbstractTree):
             else:
                 return False
 
+    def _find_subtree_minimal(self, node):
+        while node.left.key is not None:
+            node = node.left
+        return node
+
+    def _transplant(self, node1, node2):
+        node1.key, node1.data, node2.key, node2.data = node2.key, node2.data, node1.key, node1.data
+
+    def _replace(self, node, child):
+        parent = node.parent
+        if node.parent is None:
+            self._root = child
+            # self._root.color = "black"
+        elif node.parent.left == node:
+            if child is None:
+                node.parent.left = Leaf(node.parent)
+            else:
+                node.parent.left = child
+        else:
+            if child is None:
+                node.parent.right = Leaf(node.parent)
+            else:
+                node.parent.right = child
+        if parent is not None and child is not None:
+            child.parent = parent
+
+    def _delete_node_without_children(self, node):
+        if not isinstance(node.left, Leaf):
+            self._replace(node, node.left)
+            return node.left
+        if not isinstance(node.right, Leaf):
+            self._replace(node, node.right)
+            return node.right
+        child = Leaf(node) if node.color == "black" else None
+        self._replace(node, child)
+        return child
+
     def delete(self, key):
         """
         Deletes the given key from the tree
         :param key:
         :return:
         """
-
+        if key == self._root.key and isinstance(self._root.right, Leaf) and isinstance(self._root.left, Leaf):
+            self._root = Leaf(None)
+            return
         node = self._root
         while 1:
-            if node.key > key:
-                node = node.right
-            elif node.key < key:
-                node = node.left
+            if node.key is not None:
+                if node.key > key:
+                    node = node.left
+                elif node.key < key:
+                    node = node.right
+                else:
+                    break
             else:
-                break
-        if node.right is None and node.left is None and node.color == "red":
-            node = None
-        if node.right is None and node.left is None and node.color == "black":
-            pass
-        if (node.right is not None or node.left is not None) and node.color == "black":
-            pass
+                return
+        if isinstance(node.left, Leaf) or isinstance(node.right, Leaf):
+            child = self._delete_node_without_children(node)
+            deleted_color = node.color
+        else:
+            min_right = self._find_subtree_minimal(node.right)
+            self._transplant(node, min_right)
+            child = self._delete_node_without_children(min_right)
+            deleted_color = min_right.color
+        if deleted_color == "black":
+            self._delete_balance(child)
+            if isinstance(child, Leaf):
+                self._replace(child, None)
+
+    def _delete_balance(self, node):
+        if node == self._root:
+            if self._root.color == "red":
+                self._root.color = "black"
+            return
+        brother = node.parent.left if node == node.parent.right else node.parent.right
+        if brother.color == "red":
+            brother.color = "black"
+            node.parent.color = "red"
+            if node == node.parent.left:
+                self.rotate_left(node.parent)
+            else:
+                self.rotate_right(node.parent)
+            brother = node.parent.left if node == node.parent.right else node.parent.right
+        if brother.left.color == brother.right.color == "black":
+            brother.color = "red"
+            if node.parent.color == "red":
+                node.parent.color = "black"
+            else:
+                self._delete_balance(node.parent)
+        else:
+            if node == node.parent.left and brother.right.color == "black":
+                brother.left.color = "black"
+                brother.color = "red"
+                self.rotate_right(brother)
+                brother = node.parent.left if node == node.parent.right else node.parent.right
+            elif node == node.parent.right and brother.left.color == "black":
+                brother.right.color = "black"
+                brother.color = "red"
+                self.rotate_left(brother)
+                brother = node.parent.left if node == node.parent.right else node.parent.right
+            brother.color = node.parent.color
+            node.parent.color = "black"
+            if node == node.parent.left:
+                brother.right.color = "black"
+                self.rotate_left(node.parent)
+            else:
+                brother.left.color = "black"
+                self.rotate_right(node.parent)
 
     def __iter__(self):
-        pass
-
-    def __getitem__(self, item):
-        return self.get(item)
-
-    def __setitem__(self, key, value):
-        self.insert(key, value)
-
-    def __contains__(self, item):
-        return self.contains(item)
-
-a = RedBlackTree()
-a.insert(0, 0)
-a.insert(1, 1)
-a.insert(2, 2)
-a.insert(7, 7)
-a.insert(8, 8)
-a.insert(3, 3)
-a.insert(4, 4)
-a.insert(5, 5)
-a.insert(6, 6)
-t1 = a.get(0)
-t2 = a.get(1)
-t3 = a.get(2)
-t4 = a.get(3)
-t5 = a.get(4)
-t6 = a.get(5)
-t7 = a.get(6)
-t8 = a.get(7)
-t9 = a.get(8)
-# print(a._root.key)
-# a.insert("A", 1)
-# a.insert("B", 2)
-# a.insert("C", 4)
-# a.insert(68, 67)
-# a.insert(1, 1)
-# a.insert(2, 2)
-# a = a
-# for i in range(1, 12, 1):
-#     a.insert(i, i)
-# a = a
-# print(a.get(10))
+        """Iter"""
+        def dfs(node: BSTNode):
+            """DFS"""
+            if not isinstance(node, Leaf):
+                yield from dfs(node.left)
+                yield node.key, node.data
+                yield from dfs(node.right)
+        yield from dfs(self._root)
