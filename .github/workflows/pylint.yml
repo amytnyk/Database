@@ -18,4 +18,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        python -m pylint core/trees/*.py --disable C0114,C0115,C0116,C0301,R0903,R0911,E0401
+        python -m pylint core/trees/*.py --disable C0114,C0115,C0116,C0301,R0903,R0911,E0401,R0801
