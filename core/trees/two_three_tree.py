@@ -161,9 +161,10 @@ class Node:
             return self.data
 
         children_data = []
-        children_data.extend(self.data)
         for child in self.children:
             children_data.extend(child.get_all_children_data_recursive())
+        children_data.extend(self.data)
+
         return children_data
 
     def search_node_with_minimum_key(self):
@@ -293,6 +294,12 @@ class TwoThreeTree(AbstractTree):
             return True
         return False
 
+    def __iter__(self):
+        """ Return iterator over keys in tree """
+        if not self._has_root:
+            return iter([])
+        return iter(self.root.get_all_children_data_recursive())
+
 
 if __name__ == '__main__':
     tree = TwoThreeTree()
@@ -322,3 +329,5 @@ if __name__ == '__main__':
     print()
     print(f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}")
     print(f"Size of tree: {len(tree)}")
+    print()
+    print(f"Iterate over tree: {list(tree)}")
