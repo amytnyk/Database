@@ -172,7 +172,7 @@ class Node:
         for key_n in range(len(self)):
             if self.data[key_n][0] == key:
                 if self.is_leaf and self.parent is None:
-                    self.data = []
+                    self.data.pop(key_n)
                     return
                 if self.is_leaf:
                     minimum_node = self
