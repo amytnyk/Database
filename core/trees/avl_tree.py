@@ -1,10 +1,14 @@
+"""
+AVL Tree
+"""
 from core.trees.abstract_tree import AbstractTree
 
 
-class AVLNode(object):
+class AVLNode():
     """AVL node"""
 
     def __init__(self, key, val, left=None, right=None):
+        """Init"""
         self.key = key
         self.val = val
         self.left = left
@@ -14,11 +18,15 @@ class AVLNode(object):
 
 class AVLTree(AbstractTree):
     """AVL tree"""
+
     def __init__(self):
+        """Init"""
         self._root = None
 
     def __iter__(self):
+        """Iter"""
         def dfs(node: AVLNode):
+            """DFS"""
             if node:
                 yield from dfs(node.left)
                 yield node.key, node.val
@@ -26,8 +34,9 @@ class AVLTree(AbstractTree):
         yield from dfs(self._root)
 
     def insert(self, key, val):
-
+        """Insert"""
         def insert_helper(root: AVLNode, key, val):
+            """Helper function"""
             if not root:
                 root = AVLNode(key, val)
             elif key < root.key:
@@ -44,16 +53,14 @@ class AVLTree(AbstractTree):
             if balance > 1:
                 if key < root.left.key:
                     return self.r_rotate(root)
-                else:
-                    root.left = self.l_rotate(root.left)
-                    return self.r_rotate(root)
+                root.left = self.l_rotate(root.left)
+                return self.r_rotate(root)
 
             if balance < -1:
                 if key > root.right.key:
                     return self.l_rotate(root)
-                else:
-                    root.right = self.r_rotate(root.right)
-                    return self.l_rotate(root)
+                root.right = self.r_rotate(root.right)
+                return self.l_rotate(root)
 
             return root
         if isinstance(key, list):
@@ -63,8 +70,12 @@ class AVLTree(AbstractTree):
             self._root = insert_helper(self._root, key, val)
 
     def get(self, key):
+        """
+        Returns node's value if found
+        Else raises KeyError
+        """
         root = self._root
-        while root != None:
+        while root is not None:
             if key < root.key:
                 root = root.left
             elif key > root.key:
@@ -74,6 +85,9 @@ class AVLTree(AbstractTree):
         raise KeyError
 
     def contains(self, key) -> bool:
+        """
+        Checks if element is in tree
+        """
         try:
             self.get(key)
             return True
@@ -81,15 +95,21 @@ class AVLTree(AbstractTree):
             return False
 
     def delete(self, key):
+        """Delete"""
         def helper(root: AVLNode):
+            """
+            Helper's helper function
+            Gets minimal node
+            """
             if root is None or root.left is None:
                 return root
             return helper(root.left)
 
         def delete_helper(key, root):
+            """Helper function"""
             if not root:
                 return root
-            elif key < root.key:
+            if key < root.key:
                 root.left = delete_helper(key, root.left)
             elif key > root.key:
                 root.right = delete_helper(key, root.right)
@@ -98,7 +118,7 @@ class AVLTree(AbstractTree):
                     temp = root.right
                     root = None
                     return temp
-                elif root.right is None:
+                if root.right is None:
                     temp = root.left
                     root = None
                     return temp
@@ -111,25 +131,25 @@ class AVLTree(AbstractTree):
             root.height = 1 + max(self.n_height(root.left),
                                   self.n_height(root.right))
 
-            balanceFactor = self.balance(root)
+            n_balance = self.balance(root)
 
-            if balanceFactor > 1:
+            if n_balance > 1:
                 if self.balance(root.left) >= 0:
                     return self.r_rotate(root)
-                else:
-                    root.left = self.l_rotate(root.left)
-                    return self.r_rotate(root)
-            if balanceFactor < -1:
+                root.left = self.l_rotate(root.left)
+                return self.r_rotate(root)
+
+            if n_balance < -1:
                 if self.balance(root.right) <= 0:
                     return self.l_rotate(root)
-                else:
-                    root.right = self.r_rotate(root.right)
-                    return self.l_rotate(root)
+                root.right = self.r_rotate(root.right)
+                return self.l_rotate(root)
             return root
         root = self._root
         self._root = delete_helper(key, root)
 
     def l_rotate(self, node: AVLNode):
+        """Left rotation"""
         r_nde = node.right
         lr_nde = r_nde.left
         r_nde.left = node
@@ -141,6 +161,7 @@ class AVLTree(AbstractTree):
         return r_nde
 
     def r_rotate(self, node: AVLNode):
+        """Right rotation"""
         l_nde = node.left
         rl_nde = l_nde.right
         l_nde.right = node
@@ -152,11 +173,14 @@ class AVLTree(AbstractTree):
         return l_nde
 
     def n_height(self, root: AVLNode):
+        """Returns node height"""
         if not root:
             return 0
         return root.height
 
     def balance(self, root: AVLNode):
+        """Checks balance"""
         if not root:
             return 0
         return self.n_height(root.left) - self.n_height(root.right)
+
