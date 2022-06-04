@@ -305,7 +305,7 @@ class TwoThreeTree(AbstractTree):
         """ Return True if key is in tree """
         if not self._has_root:
             return False
-        return self.root.get(key)
+        return self.root.get(key) is not None
 
     def delete(self, key):
         """ Delete key from tree """
