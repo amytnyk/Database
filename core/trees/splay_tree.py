@@ -1,5 +1,5 @@
 """Module to create a splay tree"""
-# from core.trees.abstract_tree import AbstractTree
+from core.trees.abstract_tree import AbstractTree
 
 class Node:
     def  __init__(self, key, data=None):
@@ -11,7 +11,7 @@ class Node:
         self.left = None
         self.right = None
 
-class SplayTree:
+class SplayTree(AbstractTree):
     """Class to represent a splay tree, based on Abstract tree"""
     def __init__(self):
         self.root = None
