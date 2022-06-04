@@ -4,7 +4,7 @@ AVL Tree
 from core.trees.abstract_tree import AbstractTree
 
 
-class AVLNode():
+class AVLNode:
     """AVL node"""
 
     def __init__(self, key, val, left=None, right=None):
@@ -183,4 +183,3 @@ class AVLTree(AbstractTree):
         if not root:
             return 0
         return self.n_height(root.left) - self.n_height(root.right)
-
