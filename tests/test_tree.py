@@ -9,7 +9,7 @@ from core.trees.red_black_tree import RedBlackTree
 from core.trees.splay_tree import SplayTree
 from core.trees.two_three_tree import TwoThreeTree
 
-trees = [BuiltinTree, TwoThreeTree, BTree]  # TODO [AVLTree, RedBlackTree, BTree, TwoThreeTree, SplayTree]
+trees = [BuiltinTree, BTree, TwoThreeTree]  # TODO [AVLTree, RedBlackTree, BTree, TwoThreeTree, SplayTree]
 
 
 class TreeTest(unittest.TestCase):
@@ -99,3 +99,16 @@ class TreeTest(unittest.TestCase):
         self.assertEqual(tree.get("B"), 2)
         tree.insert("B", "A")
         self.assertEqual(tree.get("B"), "A")
+
+    @run_tests
+    def test_iter(self, test_type):
+        tree = test_type()
+
+        tree.insert(2, 1)
+        tree.insert(4, 2)
+        tree.insert(1, 3)
+        tree.insert(10, 1)
+        tree.insert(11, 2)
+        tree.insert(0, 1)
+
+        self.assertEquals(list(iter(tree)), [(0, 1), (1, 3), (2, 1), (4, 2), (10, 1), (11, 2)])
