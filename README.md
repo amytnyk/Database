@@ -11,7 +11,7 @@ The following Self-Balancing Binary Search Trees have been implemented:
 - 2-3 tree
 
 ## Detailed information about the project
-Read more about the project on the wiki
+Read more about the project on the [wiki](https://github.com/amytnyk/Database/wiki)
 
 ## Contributors
  - Maksym Mykhasiuta
