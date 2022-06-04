@@ -1,4 +1,8 @@
+from abc import abstractmethod
+
+
 class AbstractTree:
+    @abstractmethod
     def insert(self, key, value):
         """
         Inserts key-value pair into the tree
@@ -7,8 +11,8 @@ class AbstractTree:
         :param value:
         :return: None
         """
-        pass
 
+    @abstractmethod
     def get(self, key):
         """
         Returns value for the given key
@@ -16,24 +20,24 @@ class AbstractTree:
         :param key:
         :return:
         """
-        pass
 
+    @abstractmethod
     def contains(self, key) -> bool:
         """
         Check if the tree contains the given key
         :param key:
         :return:
         """
-        pass
 
+    @abstractmethod
     def delete(self, key):
         """
         Deletes the given key from the tree
         :param key:
         :return:
         """
-        pass
 
+    @abstractmethod
     def __iter__(self):
         pass
 

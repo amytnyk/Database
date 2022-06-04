@@ -21,7 +21,7 @@ class AVLTree(AbstractTree):
         def dfs(node: AVLNode):
             if node:
                 yield from dfs(node.left)
-                yield (node.key, node.val)
+                yield node.key, node.val
                 yield from dfs(node.right)
         yield from dfs(self._root)
 
@@ -160,17 +160,3 @@ class AVLTree(AbstractTree):
         if not root:
             return 0
         return self.n_height(root.left) - self.n_height(root.right)
-
-
-if __name__ == "__main__":
-    myTree = AVLTree()
-    root = None
-    vals = [33, 13, 52, 9, 21, 61, 8, 11]
-    keys = ["A", "B", "C", "D", "E", "F", "G", "H"]
-    myTree.insert(keys, vals)
-    myTree.insert('K', 101)
-    print(', '.join([str(a) for a in iter(myTree)]))
-    myTree.delete('B')
-    myTree.insert('*', 13)
-    print(', '.join([str(a) for a in iter(myTree)]))
-

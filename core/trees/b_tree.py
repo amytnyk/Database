@@ -30,7 +30,7 @@ class BTree(AbstractTree):
             for idx, item in enumerate(node.items):
                 if node.children:
                     yield from dfs(node.children[idx])
-                yield node.items[idx]
+                yield item.key, item.value
             if node.children:
                 yield from dfs(node.children[-1])
 
@@ -42,7 +42,7 @@ class BTree(AbstractTree):
             if parent.key == item.key:
                 parent.value = item.value
                 return None
-            elif parent.key > item.key:
+            if parent.key > item.key:
                 return idx
         return len(node.items)
 
@@ -63,6 +63,7 @@ class BTree(AbstractTree):
                 left_node = BTree._Node(node.items[:middle_idx], node.children[:middle_idx + 1])
                 right_node = BTree._Node(node.items[middle_idx + 1:], node.children[middle_idx + 1:])
                 return middle_item, left_node, right_node
+        return None
 
     def insert(self, key, value):
         if self._root:
@@ -76,14 +77,14 @@ class BTree(AbstractTree):
     def _get(self, key):
         root = self._root
         while root is not None:
-            for i in range(len(root.items)):
-                if key < root.items[i].key:
+            for idx, item in enumerate(root.items):
+                if key < item.key:
                     if not root.children:
-                        return
-                    root = root.children[i]
+                        return None
+                    root = root.children[idx]
                     break
-                elif key == root.items[i].key:
-                    return root.items[i]
+                if key == item.key:
+                    return item
             else:
                 if key == root.items[-1].key:
                     return root.items[-1]
@@ -91,11 +92,12 @@ class BTree(AbstractTree):
                     root = root.children[-1]
                 else:
                     break
+        return None
 
     def get(self, key):
         pair = self._get(key)
         if pair is None:
-            raise IndexError
+            raise KeyError(key)
         return pair.value
 
     def contains(self, key) -> bool:
@@ -169,7 +171,7 @@ class BTree(AbstractTree):
                 node.items.pop(child_idx)
                 return
         else:
-            if not len(node.children):
+            if not node.children:
                 raise KeyError(key)
 
             self._delete(node.children[child_idx], key)

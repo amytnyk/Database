@@ -112,7 +112,7 @@ class Node:
         """ Insert node into tree """
         if node.data[0][0] in self.data_list:
             # If key is already in data, replace value
-            for key_data in range(len(self.data)):
+            for key_data, _ in enumerate(self.data):
                 if self.data[key_data][0] == node.data[0][0]:
                     self.data[key_data] = node.data[0]
                     break
@@ -305,7 +305,7 @@ class TwoThreeTree(AbstractTree):
         """ Return True if key is in tree """
         if not self._has_root:
             return False
-        return True if self.root.get(key) is not None else False
+        return self.root.get(key)
 
     def delete(self, key):
         """ Delete key from tree """

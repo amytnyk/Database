@@ -17,3 +17,6 @@ class BuiltinTree(AbstractTree):
 
     def delete(self, key):
         del self.dict[key]
+
+    def __iter__(self):
+        return map(tuple, sorted(self.dict.items()))
