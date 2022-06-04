@@ -113,7 +113,7 @@ class SplayTree(AbstractTree):
         node.left = temp.right
         if temp.right is not None:
             temp.right.parent = node
-        temp.parent = node.parent;
+        temp.parent = node.parent
         if node.parent is None:
             self.root = temp
         elif node == node.parent.right:
