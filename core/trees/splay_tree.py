@@ -1,5 +1,5 @@
 """Module to create a splay tree"""
-from core.trees.abstract_tree import AbstractTree
+# from core.trees.abstract_tree import AbstractTree
 
 class Node:
     def  __init__(self, key, data=None):
@@ -11,17 +11,19 @@ class Node:
         self.left = None
         self.right = None
 
-class SplayTree(AbstractTree):
+class SplayTree:
     """Class to represent a splay tree, based on Abstract tree"""
     def __init__(self):
         self.root = None
 
     def __iter__(self):
-        if self.left is not None:
-            self.left.inorder()
-        yield self.key, self.data
-        if self.right:
-            self.right.inorder()
+        def iter_helper(node: Node):
+            """Additional function to iterate"""
+            if node is not None:
+                yield from iter_helper(node.left)
+                yield node.key, node.data
+                yield from iter_helper(node.right)
+        yield from iter_helper(self.root)
 
     def get(self, key):
         node = self.root
@@ -89,7 +91,7 @@ class SplayTree(AbstractTree):
             return False
         return True
 
-    def __left_rotate(self, node):
+    def __left_rotate(self, node: Node):
         """Performs a left rotation of the tree"""
         temp = node.right
         node.right = temp.left
@@ -105,7 +107,7 @@ class SplayTree(AbstractTree):
         temp.left = node
         node.parent = temp
 
-    def __right_rotate(self, node):
+    def __right_rotate(self, node: Node):
         """Performs a right rotation of the tree"""
         temp = node.left
         node.left = temp.right
@@ -142,7 +144,7 @@ class SplayTree(AbstractTree):
                 self.__right_rotate(node.parent)
                 self.__left_rotate(node.parent)
 
-    def _join(self, s_root, t_root):
+    def _join(self, s_root: Node, t_root: Node):
         """Joins two trees, helper for delete operation"""
         if s_root is None:
             return t_root
