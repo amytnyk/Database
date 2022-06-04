@@ -243,6 +243,9 @@ class Node:
 
             # Fast realization
             self.delete_from_node(key)
+        elif self.is_leaf:
+            # If node is leaf, key not found
+            return False
         else:
             if key < self.data[0][0]:
                 # If key is less than self, search left child
@@ -311,8 +314,7 @@ class TwoThreeTree(AbstractTree):
         """ Delete key from tree """
         if not self._has_root:
             return False
-        if self.contains(key):
-            self.root.delete(key)
+        if self.root.delete(key):
             self._find_root()
             if not self.root.data:
                 self.root = None
