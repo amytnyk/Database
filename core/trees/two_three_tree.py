@@ -298,7 +298,9 @@ class TwoThreeTree(AbstractTree):
         """ Return iterator over keys in tree """
         if not self._has_root:
             return iter([])
-        return iter(self.root.get_all_children_data_recursive())
+        elements = self.root.get_all_children_data_recursive()
+        elements.sort(key=lambda x: x[0])
+        return iter(elements)
 
 
 if __name__ == '__main__':
