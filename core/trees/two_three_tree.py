@@ -110,16 +110,15 @@ class Node:
 
     def insert(self, node):
         """ Insert node into tree """
-        if self.is_leaf:
+        if node.data[0][0] in self.data_list:
+            # If key is already in data, replace value
+            for key_data in range(len(self.data)):
+                if self.data[key_data][0] == node.data[0][0]:
+                    self.data[key_data] = node.data[0]
+                    break
+        elif self.is_leaf:
             # If node is leaf, insert into data
-            if node.data[0][0] in self.data_list:
-                # If key is already in data, replace value
-                for key_data in range(len(self.data)):
-                    if self.data[key_data][0] == node.data[0][0]:
-                        self.data[key_data] = node.data[0]
-                        break
-            else:
-                self.combine_nodes(node)
+            self.combine_nodes(node)
         else:
             # If node is not leaf, insert into children
             if node < self:
@@ -311,7 +310,8 @@ if __name__ == '__main__':
     print(tree)
     print()
     TO_DELETE = 'H'
-    print(f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}, Tree value of '{TO_DELETE}': {tree.get(TO_DELETE)}")
+    print(
+        f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}, Tree value of '{TO_DELETE}': {tree.get(TO_DELETE)}")
     print(f"Size of tree: {len(tree)}")
 
     print(f"Deleting {TO_DELETE}: {tree.delete(TO_DELETE)}")
