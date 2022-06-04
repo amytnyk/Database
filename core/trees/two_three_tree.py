@@ -112,7 +112,14 @@ class Node:
         """ Insert node into tree """
         if self.is_leaf:
             # If node is leaf, insert into data
-            self.combine_nodes(node)
+            if node.data[0][0] in self.data_list:
+                # If key is already in data, replace value
+                for key_data in range(len(self.data)):
+                    if self.data[key_data][0] == node.data[0][0]:
+                        self.data[key_data] = node.data[0]
+                        break
+            else:
+                self.combine_nodes(node)
         else:
             # If node is not leaf, insert into children
             if node < self:
@@ -263,8 +270,11 @@ class TwoThreeTree(AbstractTree):
     def get(self, key):
         """ Return key in tree, or None if not found """
         if not self._has_root:
-            return False
-        return self.root.get(key)
+            raise KeyError("Key not found")
+        element = self.root.get(key)
+        if element is None:
+            raise KeyError("Key not found")
+        return element
 
     def contains(self, key) -> bool:
         """ Return True if key is in tree """
@@ -283,3 +293,31 @@ class TwoThreeTree(AbstractTree):
                 self.root = None
             return True
         return False
+
+if __name__ == '__main__':
+    tree = TwoThreeTree()
+
+    dct = {'A': 5, 'B': 7, 'C': 9, 'D': 11, 'E': 13, 'F': 15,
+           'G': 17, 'H': 19, 'I': 21, 'J': 23, 'K': 25, 'L': 27,
+           'M': 29, 'N': 31, 'O': 33, 'P': 35, 'Q': 37, 'R': 39,
+           'S': 41, 'T': 43, 'U': 45, 'V': 47, 'W': 49, 'X': 51}
+
+    for a, b in dct.items():
+        tree.insert(a, b)
+
+    print("Size of dictionary:", len(dct))
+    print()
+    print(tree)
+    print()
+    TO_DELETE = 'H'
+    print(f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}, Tree value of '{TO_DELETE}': {tree.get(TO_DELETE)}")
+    print(f"Size of tree: {len(tree)}")
+
+    print(f"Deleting {TO_DELETE}: {tree.delete(TO_DELETE)}")
+    print(f"Deleting {TO_DELETE}: {tree.delete(TO_DELETE)}")
+
+    print()
+    print(tree)
+    print()
+    print(f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}")
+    print(f"Size of tree: {len(tree)}")
