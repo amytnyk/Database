@@ -165,7 +165,6 @@ class RedBlackTree(AbstractTree):
         parent = node.parent
         if node.parent is None:
             self._root = child
-            # self._root.color = "black"
         elif node.parent.left == node:
             if child is None:
                 node.parent.left = Leaf(node.parent)
