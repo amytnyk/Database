@@ -166,17 +166,11 @@ class RedBlackTree(AbstractTree):
             self._root = child
             return
         elif node.parent.left == node:
-            if child is None:
-                node.parent.left = Leaf(node.parent)
-            else:
-                node.parent.left = child
-                child.parent = node.parent
+            node.parent.left = child
+            child.parent = node.parent
         else:
-            if child is None:
-                node.parent.right = Leaf(node.parent)
-            else:
-                node.parent.right = child
-                child.parent = node.parent
+            node.parent.right = child
+            child.parent = node.parent
 
     def _delete_node_without_children(self, node):
         if not isinstance(node.left, Leaf):
@@ -270,3 +264,4 @@ class RedBlackTree(AbstractTree):
                 yield node.key, node.data
                 yield from dfs(node.right)
         yield from dfs(self._root)
+
