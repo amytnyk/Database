@@ -245,7 +245,7 @@ class Node:
             self.delete_from_node(key)
         elif self.is_leaf:
             # If node is leaf, key not found
-            return False
+            return
         else:
             if key < self.data[0][0]:
                 # If key is less than self, search left child
@@ -326,35 +326,3 @@ class TwoThreeTree(AbstractTree):
         if not self._has_root:
             return iter([])
         return iter(self.root.inorder())
-
-
-if __name__ == '__main__':
-    tree = TwoThreeTree()
-
-    dct = {'A': 5, 'B': 7, 'C': 9, 'D': 11, 'E': 13, 'F': 15,
-           'G': 17, 'H': 19, 'I': 21, 'J': 23, 'K': 25, 'L': 27,
-           'M': 29, 'N': 31, 'O': 33, 'P': 35, 'Q': 37, 'R': 39,
-           'S': 41, 'T': 43, 'U': 45, 'V': 47, 'W': 49, 'X': 51}
-
-    for a, b in dct.items():
-        tree.insert(a, b)
-
-    print("Size of dictionary:", len(dct))
-    print()
-    print(tree)
-    print()
-    TO_DELETE = 'H'
-    print(
-        f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}, Tree value of '{TO_DELETE}': {tree.get(TO_DELETE)}")
-    print(f"Size of tree: {len(tree)}")
-
-    print(f"Deleting {TO_DELETE}: {tree.delete(TO_DELETE)}")
-    print(f"Deleting {TO_DELETE}: {tree.delete(TO_DELETE)}")
-
-    print()
-    print(tree)
-    print()
-    print(f"Tree contains '{TO_DELETE}': {tree.contains(TO_DELETE)}")
-    print(f"Size of tree: {len(tree)}")
-    print()
-    print(f"Iterate over tree: {list(tree)}")
