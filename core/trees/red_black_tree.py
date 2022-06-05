@@ -162,21 +162,21 @@ class RedBlackTree(AbstractTree):
         node1.key, node1.data, node2.key, node2.data = node2.key, node2.data, node1.key, node1.data
 
     def _replace(self, node, child):
-        parent = node.parent
         if node.parent is None:
             self._root = child
+            return
         elif node.parent.left == node:
             if child is None:
                 node.parent.left = Leaf(node.parent)
             else:
                 node.parent.left = child
+                child.parent = node.parent
         else:
             if child is None:
                 node.parent.right = Leaf(node.parent)
             else:
                 node.parent.right = child
-        if parent is not None and child is not None:
-            child.parent = parent
+                child.parent = node.parent
 
     def _delete_node_without_children(self, node):
         if not isinstance(node.left, Leaf):
@@ -185,7 +185,7 @@ class RedBlackTree(AbstractTree):
         if not isinstance(node.right, Leaf):
             self._replace(node, node.right)
             return node.right
-        child = Leaf(node) if node.color == "black" else None
+        child = Leaf(node)
         self._replace(node, child)
         return child
 
@@ -209,6 +209,7 @@ class RedBlackTree(AbstractTree):
                     break
             else:
                 return
+
         if isinstance(node.left, Leaf) or isinstance(node.right, Leaf):
             child = self._delete_node_without_children(node)
             deleted_color = node.color
@@ -219,8 +220,6 @@ class RedBlackTree(AbstractTree):
             deleted_color = min_right.color
         if deleted_color == "black":
             self._delete_balance(child)
-            if isinstance(child, Leaf):
-                self._replace(child, None)
 
     def _delete_balance(self, node):
         if node == self._root:
