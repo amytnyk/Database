@@ -1,5 +1,8 @@
 # Self-Balancing Binary Search Trees Research. Creation of a primitive database implementation based on the SQL standard.
 
+[![Pylint](https://github.com/amytnyk/Database/actions/workflows/pylint.yml/badge.svg)](https://github.com/amytnyk/Database/actions/workflows/pylint.yml)
+[![Tests](https://github.com/amytnyk/Database/actions/workflows/tests.yml/badge.svg)](https://github.com/amytnyk/Database/actions/workflows/tests.yml)
+
 In this project, a study of Self-Balancing Binary Search Trees data structures was performed.  
 Binary search trees are trees that are able to maintain a balance of their height, which significantly speeds up operations.  
 
