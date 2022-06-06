@@ -1,8 +1,8 @@
 import os.path
 from typing import Type, List
 
-from core.in_memory_database.binary_io import AdvancedBinaryIO
-from core.in_memory_database.table import Table, Column
+from core.databases.utils.binary_io import AdvancedBinaryIO
+from core.databases.in_memory_database.table import Table, Column
 
 
 class Database:

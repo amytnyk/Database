@@ -18,7 +18,7 @@ class AdvancedBinaryIO:
     def write_float(self, num: float):
         self.file.write(struct.pack('f', num))
 
-    def read_string(self):
+    def read_string(self) -> str:
         size = self.read_int()
         return self.file.read(size).decode('utf-8')
 
@@ -32,3 +32,16 @@ class AdvancedBinaryIO:
 
     def write_bool(self, num: bool):
         self.file.write(b'\1' if num else b'\0')
+
+    def read_byte(self) -> int:
+        return int.from_bytes(self.file.read(1), "big")
+
+    def write_byte(self, byte: int):
+        self.file.write(byte.to_bytes(1, "big"))
+
+    def fill(self, count: int):
+        self.file.write(bytes(count))
+
+    def __getattr__(self, item):
+        return self.file.__getattribute__(item)
+

@@ -8,7 +8,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
+from core.trees.avl_tree import AVLTree
+from core.trees.b_tree import BTree
 from core.trees.builtin_tree import BuiltinTree
+from core.trees.red_black_tree import RedBlackTree
+from core.trees.splay_tree import SplayTree
 from core.trees.two_three_tree import TwoThreeTree
 
 
@@ -129,8 +133,8 @@ class ProfileTreesSpeed:
 
 
 if __name__ == '__main__':
-    trees_to_profile = [BuiltinTree, TwoThreeTree]  # TODO [AVLTree, RedBlackTree, BTree, TwoThreeTree, SplayTree]
-    data_sizes_to_test = [100, 150, 1000, 10000, 20000]
+    trees_to_profile = [AVLTree, BTree, RedBlackTree, SplayTree, BuiltinTree, TwoThreeTree]
+    data_sizes_to_test = [100, 150, 1000, 5000, 10000, 15000, 20000]
     profile = ProfileTreesSpeed(trees_to_profile, data_sizes_to_test)
     profile.run_speed_profile()
     print(profile.results)

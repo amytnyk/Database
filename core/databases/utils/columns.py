@@ -53,3 +53,15 @@ class Columns:
         for idx, column in enumerate(self.columns):
             if column.is_unique:
                 yield idx, column
+
+    def get_size(self):
+        size = 0
+        for column in self.columns:
+            if column.value_type == 'str':
+                size += 255
+            elif column.value_type == 'int' or column.value_type == 'float':
+                size += 4
+            elif column.value_type == 'bool':
+                size += 1
+            else:
+                raise RuntimeError
