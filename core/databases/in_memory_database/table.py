@@ -19,7 +19,7 @@ class Table:
             yield self._columns.make_values(key, value, list(columns))
 
     def select_where(self, predicate: str, *columns):
-        frames = list(compile_predicate(predicate))
+        frames = list(compile_predicate(predicate, self._columns))
         unique_frames = filter(lambda x: x.is_unique(), frames)
         standard_frames = filter(lambda x: not x.is_unique(), frames)
 
